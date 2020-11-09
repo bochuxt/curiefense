@@ -8,9 +8,8 @@ We named this project after the famous scientist Marie Curie. It began in intens
 But this is just the beginning. We already have an extensive roadmap for additional capabilities, which will be available in our Curiefense github soon. We’re eager to receive feedback, opinions and ideas from the community, so we can make the platform even better than we could on our own.
 
 
-
-### [Quick Start Guide](https://docs.curiefense.io/installation/getting-started-with-curiefense)
-### Full documentation is available at [docs.curiefense.io](https://docs.curiefense.io)
-
-### Join our [Mailing List](https://groups.google.com/a/curiefense.io/g/community)
+#### [Curiefense Website](https://curiefense.io)
+#### [Quick Start Guide](https://docs.curiefense.io/installation/getting-started-with-curiefense)
+#### Full documentation is available at [docs.curiefense.io](https://docs.curiefense.io)
+#### Join our [Mailing List](https://groups.google.com/a/curiefense.io/g/community)
 
