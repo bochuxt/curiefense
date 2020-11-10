@@ -109,11 +109,16 @@ function gen_list_entries(lst, handle)
 
                         local start_addr, end_addr = parse_cidr(cidr)
                         -- [[start,end], annotation]
-                        elem =  { {start_addr, end_addr}, get_annotation(data) }
-                        handle:logDebug(string.format("MC %s CIDR %s S %s E %s EL %s",
-                            mastercategory, cidr, start_addr, end_addr, elem))
+                        if start_addr == nil then
+                            handle:logWarn(string.format("CIDR %s could not be parsed",
+                                cidr))
+                        else
+                            elem =  { {start_addr, end_addr}, get_annotation(data) }
+                            handle:logDebug(string.format("MC %s CIDR %s S %s E %s EL %s",
+                                mastercategory, cidr, start_addr, end_addr, elem))
 
-                        table.insert(masterdict[mastercategory], elem)
+                            table.insert(masterdict[mastercategory], elem)
+                        end
                     end
                 end
             end
