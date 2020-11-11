@@ -10,7 +10,7 @@ setup(
     author_email='phil@reblaze.com',
     packages=['curieconf.confclient',
               'curieconf.cli'],
-    scripts=['bin/curieconf_cli'],
+    scripts=['bin/curieconfctl'],
 
     install_requires=[
         "wheel",
