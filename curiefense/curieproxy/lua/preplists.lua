@@ -87,14 +87,14 @@ function gen_list_entries(lst, handle)
             else
                 if category == "ip" then
                     local address = data[1]
-                    handle:logDebug(string.format("ADDRESS %s", address))
+                    -- handle:logDebug(string.format("ADDRESS %s", address))
                     -- single address
                     if not ("/"):within(address) or address:endswith("/32") then
                         address = address:replace("/32", "")
                         mastercategory, key = categorize_singles(address)
 
-                        handle:logDebug(string.format("MC %s C %s K %s D %s",
-                            mastercategory, category, key, data))
+                        -- handle:logDebug(string.format("MC %s C %s K %s D %s",
+                        --     mastercategory, category, key, data))
 
                         -- store
                         masterdict[mastercategory][category][key] = get_annotation(data)
@@ -114,8 +114,8 @@ function gen_list_entries(lst, handle)
                                 cidr))
                         else
                             elem =  { {start_addr, end_addr}, get_annotation(data) }
-                            handle:logDebug(string.format("MC %s CIDR %s S %s E %s EL %s",
-                                mastercategory, cidr, start_addr, end_addr, elem))
+                            -- handle:logDebug(string.format("MC %s CIDR %s S %s E %s EL %s",
+                            --     mastercategory, cidr, start_addr, end_addr, elem))
 
                             table.insert(masterdict[mastercategory], elem)
                         end
@@ -127,6 +127,6 @@ function gen_list_entries(lst, handle)
     if #masterdict['iprange'] > 0 then
         masterdict['iprange'] = build_ranges_lists(masterdict['iprange'])
     end
-    handle:logDebug(string.format("MASTER DICT -- \n%s\n",json_safe.encode(masterdict)))
+    -- handle:logDebug(string.format("MASTER DICT -- \n%s\n",json_safe.encode(masterdict)))
     return masterdict
 end
