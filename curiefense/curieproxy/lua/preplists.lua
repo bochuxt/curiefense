@@ -72,7 +72,7 @@ function gen_list_entries(lst, handle)
         if category:within("args cookies headers") then
             local pairk, pairv, pairannotation = data[1][1], data[1][2], get_annotation(data)
             local mastercategory, pairv = categorize_pairs(pairv)
-            handle:logDebug(string.format("K %s V %s A %s", pairk, pairv, pairannotation))
+            -- handle:logDebug(string.format("K %s V %s A %s", pairk, pairv, pairannotation))
             masterdict[mastercategory][category][pairk] = { pairv, pairannotation }
         -- singles
         else
@@ -80,8 +80,8 @@ function gen_list_entries(lst, handle)
             if category:within("path query uri asn country method") then
                 -- negate vs standard
                 local mastercategory, key = categorize_singles(data[1])
-                handle:logDebug(string.format("MC %s C %s K %s D %s",
-                    mastercategory, category, key, data))
+                -- handle:logDebug(string.format("MC %s C %s K %s D %s",
+                --     mastercategory, category, key, data))
                 -- store
                 masterdict[mastercategory][category][key] = get_annotation(data)
             else
