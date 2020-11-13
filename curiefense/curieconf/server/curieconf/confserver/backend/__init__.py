@@ -112,4 +112,5 @@ class CurieBackend(object):
         raise NotImplementedError
 
 
-from . import gitbackend, mongobackend
+# from . import gitbackend, mongobackend
+from . import gitbackend#, mongobackend

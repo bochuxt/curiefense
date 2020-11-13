@@ -134,14 +134,14 @@ function negate_match_or_list(request_map, list)
     end
   end
 
-  if list.pairs and next(list.pairs) then
+  if list.negate_pairs and next(list.negate_pairs) then
     local annotation, tags = negate_match_pairs(request_map, list.negate_pairs)
     if annotation then
       return annotation, list.tags
     end
   end
 
-  if list.iprange and next(list.iprange) then
+  if list.negate_iprange and next(list.negate_iprange) then
     local annotation, tags = match_iprange(request_map, list.negate_iprange)
     if not annotation then
       return 'negate', list.tags
@@ -154,9 +154,9 @@ end
 function tag_lists(request_map)
   request_map.handle:logDebug("tag_lists entered")
 
-  request_map.handle:logDebug(
-    string.format("globals.ProfilingLists -- \n%s\n",
-      json_safe.encode(globals.ProfilingLists)))
+  -- request_map.handle:logDebug(
+  --   string.format("globals.ProfilingLists -- \n%s\n",
+  --     json_safe.encode(globals.ProfilingLists)))
 
   for _, list in pairs(globals.ProfilingLists) do
     if list.entries_relation == "OR" then
