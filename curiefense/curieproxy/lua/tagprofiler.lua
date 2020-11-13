@@ -152,11 +152,6 @@ function negate_match_or_list(request_map, list)
 end
 
 function tag_lists(request_map)
-  request_map.handle:logDebug("tag_lists entered")
-
-  -- request_map.handle:logDebug(
-  --   string.format("globals.ProfilingLists -- \n%s\n",
-  --     json_safe.encode(globals.ProfilingLists)))
 
   for _, list in pairs(globals.ProfilingLists) do
     if list.entries_relation == "OR" then
@@ -165,8 +160,6 @@ function tag_lists(request_map)
 
       if annotation then
         tag_request(request_map, tags)
-      else
-        request_map.handle:logDebug(string.format("profiling lists no match a:t %s:%s", annotation, tags))
       end
 
       annotation, tags = negate_match_or_list(request_map, list)
@@ -174,7 +167,9 @@ function tag_lists(request_map)
       if annotation then
         tag_request(request_map, tags)
       end
+
     end
+
   end
-  request_map.handle:logDebug("tag_lists exited")
+
 end
