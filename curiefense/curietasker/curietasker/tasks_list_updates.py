@@ -13,13 +13,23 @@ class TaskUpdate(Task):
         "asn": re.compile("^as(?P<val>[0-9]{3,6}) *([;#] *(?P<comment>.*$))?", re.IGNORECASE),
     }
     def check_args(self, list_ids, branches):
-        assert type(list_ids) is list, f"Unrecognized list ids: {list_ids!r}"
-        assert type(branches) is list, f"Unrecognized branch list: {branches!r}"
+        assert type(list_ids) is list or list_ids == "*", f"Unrecognized list ids: {list_ids!r}"
+        assert type(branches) is list or branches == "*", f"Unrecognized branch list: {branches!r}"
         self.list_ids = list_ids
         self.branches = branches
     def action(self):
-        for lstid in self.list_ids:
-            for branch in self.branches:
+
+        branches = self.branches
+        if branches == "*":
+            l = self.confserver.configs.list().body
+            branches = [ b["id"] for b in l ]
+            self.log.info(f"Working on all branches: {branches!r}")
+        for branch in branches:
+            lstids = self.list_ids
+            if lstids == "*":
+                lstids = self.confserver.entries.list(branch, "profilinglists").body
+                self.log.info(f"Working on lists: {lstids!r}")
+            for lstid in lstids:
                 self.log.info(f"Downloading {lstid} in branch {branch}")
                 try:
                     lst = self.confserver.entries.get(branch, "profilinglists", 
