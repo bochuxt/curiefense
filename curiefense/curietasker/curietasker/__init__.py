@@ -20,7 +20,7 @@ def main(args=None):
     parser = argparse.ArgumentParser()
 
     parser.add_argument("--base-url", default=os.environ.get("CURIECONF_BASE_URL", "http://confserver/api/v1/"))
-    parser.add_argument("--task-db-name", default="tasks")
+    parser.add_argument("--task-db-name", default=os.environ.get("CURIETASKER_DB_NAME", "tasks"))
     parser.add_argument("--task-file", type=argparse.FileType("r"), default=None)
     parser.add_argument("--verbose", "-v", action="count", default=3)
     parser.add_argument("--quiet", "-q", action="count", default=0)
