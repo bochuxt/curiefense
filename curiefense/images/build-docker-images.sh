@@ -24,7 +24,7 @@ if [ -n "$TESTIMG" ]; then
     echo "Building only image $TESTIMG"
 else
     IMAGES=(confserver curielogger curielogserver curieproxy-istio curieproxy-envoy curiesync \
-            grafana logdb prometheus redis uiserver)
+            curietasker grafana logdb prometheus redis uiserver)
 fi
 
 echo "-------"

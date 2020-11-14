@@ -99,6 +99,13 @@ services:
 #      - gc
 #      - azr
 
+  curietasker:
+    container_name: curietasker
+    image: "curiefense/curietasker:${DOCKER_TAG}"
+    restart: always
+    networks:
+      - confnet
+
   redis:
     container_name: redis
     image: "curiefense/redis:${DOCKER_TAG}"
