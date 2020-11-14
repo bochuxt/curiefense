@@ -37,16 +37,17 @@ class TaskUpdate(Task):
                 except Exception as e:
                     self.log.error(f"Could not download {lstid} in branch {branch}: {e}")
                     continue
-                if "source" not in lst:
-                    self.log.error(f"Profiling list {lstid} is missing 'source' attribute")
+                source = lst.get("source")
+                if source == "self-managed":
+                    self.log.info(f"List {lstid} is self-managed")
                     continue
 
-                self.log.info(f"Downloading update from {lst['source']}")
+                self.log.info(f"Downloading update from {source}")
                 try:
-                    r = requests.get(lst["source"])
+                    r = requests.get(source)
                     r.raise_for_status()
                 except Exception as e:
-                    self.log.error(f"Could not download url [{lst['source']}] for list {lstid}")
+                    self.log.error(f"Could not download url [{source}] for list {lstid}")
                     continue
 
                 lst["mdate"] = datetime.datetime.now().isoformat()
@@ -64,9 +65,9 @@ class TaskUpdate(Task):
                                                          m.group("comment") or "" ])
                                         break
                                 except Exception as e:
-                                    self.log.error(f"Error parsing [{lst['source']}] line [{l!r}]: {e}")
+                                    self.log.error(f"Error parsing [{source}] line [{l!r}]: {e}")
                     except Exception as e:
-                        self.log.error(f"Error parsing content from [{lst['source']}]: {e}")
+                        self.log.error(f"Error parsing content from [{source}]: {e}")
                     self.log.info(f"Got {len(entries)} entries out of {len(r.text.splitlines())}")
 
                 lst["entries"] = entries
