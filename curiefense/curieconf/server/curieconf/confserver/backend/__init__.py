@@ -111,6 +111,4 @@ class CurieBackend(object):
     def key_delete(self, dbname, key):
         raise NotImplementedError
 
-
-# from . import gitbackend, mongobackend
-from . import gitbackend#, mongobackend
+from . import gitbackend
