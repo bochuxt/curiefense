@@ -13,7 +13,7 @@ local json_encode     = cjson.encode
 
 function match_singles(request_map, list_entry)
 
-  request_map.handle:logDebug(string.format("match_singles request_map %s", json_encode(request_map.attrs)))
+  request_map.handle:logDebug(string.format("match_singles request_map %s\n%s\n%s\n%s", json_encode(request_map.headers), json_encode(request_map.cookies), json_encode(request_map.args), json_encode(request_map.attrs)))
   request_map.handle:logDebug(string.format("match_singles list_entry %s", json_encode(list_entry)))
 
   for entry_key, list_entries in pairs(list_entry) do
@@ -51,7 +51,7 @@ end
 
 function match_pairs(request_map, list_entry)
 
-  request_map.handle:logDebug(string.format("match_pairs request_map %s", json_encode(request_map.attrs)))
+  request_map.handle:logDebug(string.format("match_pairs request_map %s\n%s\n%s\n%s", json_encode(request_map.headers), json_encode(request_map.cookies), json_encode(request_map.args), json_encode(request_map.attrs)))
   request_map.handle:logDebug(string.format("match_pairs list_entry %s", json_encode(list_entry)))
 
   for entry_name, list_entries in pairs(list_entry) do
@@ -74,7 +74,7 @@ end
 -- unlike singles and ip range, with pairs negation, we must verify the header/arg/cookie exists and yet does not match
 -- otherwise,
 function negate_match_pairs(request_map, list_entry)
-  request_map.handle:logDebug(string.format("negate_match_pairs request_map %s", json_encode(request_map.attrs)))
+  request_map.handle:logDebug(string.format("negate_match_pairs request_map %s\n%s\n%s\n%s", json_encode(request_map.headers), json_encode(request_map.cookies), json_encode(request_map.args), json_encode(request_map.attrs)))
   request_map.handle:logDebug(string.format("negate_match_pairs list_entry %s", json_encode(list_entry)))
 
   for entry_name, list_entries in pairs(list_entry) do
@@ -113,7 +113,7 @@ end
 function match_or_list(request_map, list)
   --- IP > ATTRS > HCA > IPRANGE
   --- EXACT then REGEX
-  request_map.handle:logDebug(string.format("match_or_list request_map %s", json_encode(request_map.attrs)))
+  request_map.handle:logDebug(string.format("match_or_list request_map %s\n%s\n%s\n%s", json_encode(request_map.headers), json_encode(request_map.cookies), json_encode(request_map.args), json_encode(request_map.attrs)))
 
   if list.singles then
     request_map.handle:logDebug(string.format("match_or_list list.singles %s", json_encode(list.singles)))
