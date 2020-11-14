@@ -13,12 +13,11 @@ local json_encode     = cjson.encode
 
 function match_singles(request_map, list_entry)
 
-  request_map.handle:logDebug(string.format("match_singles request_map %s\n%s\n%s\n%s", json_encode(request_map.headers), json_encode(request_map.cookies), json_encode(request_map.args), json_encode(request_map.attrs)))
-  request_map.handle:logDebug(string.format("match_singles list_entry %s", json_encode(list_entry)))
+  -- request_map.handle:logDebug(string.format("match_singles request_map %s\n%s\n%s\n%s", json_encode(request_map.headers), json_encode(request_map.cookies), json_encode(request_map.args), json_encode(request_map.attrs)))
+  -- request_map.handle:logDebug(string.format("match_singles list_entry %s", json_encode(list_entry)))
 
   for entry_key, list_entries in pairs(list_entry) do
-    request_map.handle:logDebug(string.format("MATCH SINGLES entry_key %s", entry_key))
-
+    -- request_map.handle:logDebug(string.format("MATCH SINGLES entry_key %s", entry_key))
     -- exact request map
     local entry_match = list_entries[request_map[entry_key]]
     if entry_match then
@@ -39,8 +38,8 @@ function match_singles(request_map, list_entry)
             request_map.handle:logDebug(string.format("matched >> match_singles - regex %s %s", value, pattern))
             return annotation
           end
-        else
-          request_map.handle:logDebug(string.format("request_map.attrs[entry_key] %s -- nil", entry_key))
+        -- else
+        --   request_map.handle:logDebug(string.format("request_map.attrs[entry_key] %s -- nil", entry_key))
         end
       end
     end
@@ -51,8 +50,8 @@ end
 
 function match_pairs(request_map, list_entry)
 
-  request_map.handle:logDebug(string.format("match_pairs request_map %s\n%s\n%s\n%s", json_encode(request_map.headers), json_encode(request_map.cookies), json_encode(request_map.args), json_encode(request_map.attrs)))
-  request_map.handle:logDebug(string.format("match_pairs list_entry %s", json_encode(list_entry)))
+  -- request_map.handle:logDebug(string.format("match_pairs request_map %s\n%s\n%s\n%s", json_encode(request_map.headers), json_encode(request_map.cookies), json_encode(request_map.args), json_encode(request_map.attrs)))
+  -- request_map.handle:logDebug(string.format("match_pairs list_entry %s", json_encode(list_entry)))
 
   for pair_name, match_entries in pairs(list_entry) do
     for key, va in pairs(match_entries) do
@@ -66,42 +65,23 @@ function match_pairs(request_map, list_entry)
       end
     end
   end
-  -- for entry_name, list_entries in pairs(list_entry) do
-  --   for key, valuelist in pairs(list_entries) do
-  --     for _, value in ipairs(valuelist) do
-  --       if request_map[entry_name][key] and value[1] then
-  --         if (request_map[entry_name][key] == value[1] or re_match(request_map[entry_name][key], value[1])) then
-  --           request_map.handle:logDebug(string.format("matched >> match_pairs %s %s", request_map[entry_name][key], value[1]))
-  --           return value[2]
-  --         end
-  --       end
-  --     end
-  --   end
-  -- end
-  -- no match
   return false
 end
 
-
--- unlike singles and ip range, with pairs negation, we must verify the header/arg/cookie exists and yet does not match
--- otherwise,
 function negate_match_pairs(request_map, list_entry)
-  request_map.handle:logDebug(string.format("negate_match_pairs request_map %s\n%s\n%s\n%s", json_encode(request_map.headers), json_encode(request_map.cookies), json_encode(request_map.args), json_encode(request_map.attrs)))
-  request_map.handle:logDebug(string.format("negate_match_pairs list_entry %s", json_encode(list_entry)))
 
-  for entry_name, list_entries in pairs(list_entry) do
-    for key, valuelist in pairs(list_entries) do
-      if (request_map[entry_name][key]) then
-        for _, value in ipairs(valuelist) do
-          if not re_match(request_map[entry_name][key], value[1]) then
-            request_map.handle:logDebug(string.format("NOT matched >> negate_match_pairs %s %s", request_map[entry_name][key], value[1]))
-            return value[2]
-          end
+  for pair_name, match_entries in pairs(list_entry) do
+    for key, va in pairs(match_entries) do
+      local value, annotation = unpack(va)
+      local reqmap_value = request_map[pair_name][key]
+      if value and reqmap_value then
+        if reqmap_value ~= value and not re_match(reqmap_value, value) then
+          request_map.handle:logDebug(string.format("matched >> negate_match_pairs %s NOT %s", reqmap_value, value))
+          return annotation
         end
       end
     end
   end
-  -- no match
   return false
 end
 
@@ -158,7 +138,7 @@ end
 
 -- returns the first match's annotation or "1" (when normalized)
 function negate_match_or_list(request_map, list)
-
+  request_map.handle:logDebug(string.format("negate_match_or_list list %s", json_encode(list)))
   -- not match_x will do the trick.
   if list.negate_singles and next(list.negate_singles) then
     local annotation, tags = match_singles(request_map, list.negate_singles)

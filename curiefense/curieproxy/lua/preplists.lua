@@ -102,8 +102,7 @@ function gen_list_entries(lst, handle)
                         local start_addr, end_addr = parse_cidr(cidr)
                         -- [[start,end], annotation]
                         if start_addr == nil then
-                            handle:logWarn(string.format("CIDR %s could not be parsed",
-                                cidr))
+                            handle:logDebug(string.format("CIDR %s could not be parsed", cidr))
                         else
                             elem =  { {start_addr, end_addr}, get_annotation(data) }
                             table.insert(masterdict[mastercategory], elem)
