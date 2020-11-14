@@ -67,12 +67,10 @@ function gen_list_entries(lst, handle)
 
     for _, entry in ipairs(lst["entries"]) do
         category, data = entry[1], slice(entry, 2)
-        handle:logDebug(string.format("category: %s", category))
         -- pairs
         if category:within("args cookies headers") then
             local pairk, pairv, pairannotation = data[1][1], data[1][2], get_annotation(data)
             local mastercategory, pairv = categorize_pairs(pairv)
-            -- handle:logDebug(string.format("K %s V %s A %s", pairk, pairv, pairannotation))
             masterdict[mastercategory][category][pairk] = { pairv, pairannotation }
         -- singles
         else
@@ -80,21 +78,15 @@ function gen_list_entries(lst, handle)
             if category:within("path query uri asn country method") then
                 -- negate vs standard
                 local mastercategory, key = categorize_singles(data[1])
-                -- handle:logDebug(string.format("MC %s C %s K %s D %s",
-                --     mastercategory, category, key, data))
                 -- store
                 masterdict[mastercategory][category][key] = get_annotation(data)
             else
                 if category == "ip" then
                     local address = data[1]
-                    -- handle:logDebug(string.format("ADDRESS %s", address))
                     -- single address
                     if not ("/"):within(address) or address:endswith("/32") then
                         address = address:replace("/32", "")
                         mastercategory, key = categorize_singles(address)
-
-                        -- handle:logDebug(string.format("MC %s C %s K %s D %s",
-                        --     mastercategory, category, key, data))
 
                         -- store
                         masterdict[mastercategory][category][key] = get_annotation(data)
@@ -114,9 +106,6 @@ function gen_list_entries(lst, handle)
                                 cidr))
                         else
                             elem =  { {start_addr, end_addr}, get_annotation(data) }
-                            -- handle:logDebug(string.format("MC %s CIDR %s S %s E %s EL %s",
-                            --     mastercategory, cidr, start_addr, end_addr, elem))
-
                             table.insert(masterdict[mastercategory], elem)
                         end
                     end
@@ -127,6 +116,5 @@ function gen_list_entries(lst, handle)
     if #masterdict['iprange'] > 0 then
         masterdict['iprange'] = build_ranges_lists(masterdict['iprange'])
     end
-    -- handle:logDebug(string.format("MASTER DICT -- \n%s\n",json_safe.encode(masterdict)))
     return masterdict
 end
