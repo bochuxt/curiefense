@@ -13,8 +13,8 @@ local json_encode     = json_safe.encode
 
 function match_singles(request_map, list_entry)
 
-  request_map.handle:logDebug(string.format("match_singles request_map", json_encode(request_map)))
-  request_map.handle:logDebug(string.format("match_singles list_entry", json_encode(list_entry)))
+  request_map.handle:logDebug(string.format("match_singles request_map %s", json_encode(request_map)))
+  request_map.handle:logDebug(string.format("match_singles list_entry %s", json_encode(list_entry)))
 
   for entry_key, list_entries in pairs(list_entry) do
     request_map.handle:logDebug(string.format("MATCH SINGLES entry_key %s", entry_key))
@@ -51,8 +51,8 @@ end
 
 function match_pairs(request_map, list_entry)
 
-  request_map.handle:logDebug(string.format("match_pairs request_map", json_encode(request_map)))
-  request_map.handle:logDebug(string.format("match_pairs list_entry", json_encode(list_entry)))
+  request_map.handle:logDebug(string.format("match_pairs request_map %s", json_encode(request_map)))
+  request_map.handle:logDebug(string.format("match_pairs list_entry %s", json_encode(list_entry)))
 
   for entry_name, list_entries in pairs(list_entry) do
     for key, valuelist in pairs(list_entries) do
@@ -74,8 +74,8 @@ end
 -- unlike singles and ip range, with pairs negation, we must verify the header/arg/cookie exists and yet does not match
 -- otherwise,
 function negate_match_pairs(request_map, list_entry)
-  request_map.handle:logDebug(string.format("negate_match_pairs request_map", json_encode(request_map)))
-  request_map.handle:logDebug(string.format("negate_match_pairs list_entry", json_encode(list_entry)))
+  request_map.handle:logDebug(string.format("negate_match_pairs request_map %s", json_encode(request_map)))
+  request_map.handle:logDebug(string.format("negate_match_pairs list_entry %s", json_encode(list_entry)))
 
   for entry_name, list_entries in pairs(list_entry) do
     for key, valuelist in pairs(list_entries) do
@@ -113,10 +113,10 @@ end
 function match_or_list(request_map, list)
   --- IP > ATTRS > HCA > IPRANGE
   --- EXACT then REGEX
-  request_map.handle:logDebug(string.format("match_or_list request_map", json_encode(request_map)))
+  request_map.handle:logDebug(string.format("match_or_list request_map %s", json_encode(request_map)))
 
   if list.singles then
-    request_map.handle:logDebug(string.format("match_or_list list.singles", json_encode(list.singles)))
+    request_map.handle:logDebug(string.format("match_or_list list.singles %s", json_encode(list.singles)))
     local annotation, tags = match_singles(request_map, list.singles)
     if annotation then
       return annotation, list.tags
@@ -124,7 +124,7 @@ function match_or_list(request_map, list)
   end
 
   if list.pairs then
-    request_map.handle:logDebug(string.format("match_or_list list.pairs", json_encode(list.pairs)))
+    request_map.handle:logDebug(string.format("match_or_list list.pairs %s", json_encode(list.pairs)))
     local annotation, tags = match_pairs(request_map, list.pairs)
     if annotation then
       return annotation, list.tags
@@ -133,7 +133,7 @@ function match_or_list(request_map, list)
 
   if list.iprange and list.iprange.range then
     -- search(1666603009, btree)
-    request_map.handle:logDebug(string.format("match_or_list list.iprange.range", json_encode(list.iprange.range)))
+    request_map.handle:logDebug(string.format("match_or_list list.iprange.range %s", json_encode(list.iprange.range)))
     local range, annotation = btree_search(request_map.attrs.ipnum, list.iprange, request_map.handle)
     if range then
       request_map.handle:logDebug(string.format("matched >> match_or_list btree_search [%s %s], annotation %s, ipnum %s", range[1] , range[2], annotation, request_map.attrs.ipnum))
