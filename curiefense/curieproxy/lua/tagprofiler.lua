@@ -32,6 +32,7 @@ function match_singles(request_map, list_entry)
         local value = request_map.attrs[entry_key]
         if value then
           if re_match(value, pattern) then
+            request_map.handle:logDebug(string.format("matched >> match_singles - regex %s %s", value, pattern))
             return annotation
           end
         else
@@ -49,6 +50,7 @@ function match_pairs(request_map, list_entry)
     for key, valuelist in pairs(list_entries) do
       for _, value in ipairs(valuelist) do
         if (request_map[entry_name][key] == value[1] or re_match(request_map[entry_name][key], value[1])) then
+          request_map.handle:logDebug(string.format("matched >> match_pairs %s %s", request_map[entry_name][key], value[1]))
           return value[2]
         end
       end
@@ -67,6 +69,7 @@ function negate_match_pairs(request_map, list_entry)
       if (request_map[entry_name][key]) then
         for _, value in ipairs(valuelist) do
           if not re_match(request_map[entry_name][key], value[1]) then
+            request_map.handle:logDebug(string.format("NOT matched >> negate_match_pairs %s %s", request_map[entry_name][key], value[1]))
             return value[2]
           end
         end
@@ -82,9 +85,9 @@ function match_iprange(request_map, list_entry)
   local ipnum = request_map.attrs.ipnum
   for _, entry in pairs(list_entry) do
     range, annotation = unpack(entry)
-    request_map.handle:logDebug(string.format("range [%s %s], annotation %s, ipnum %s", range[1] , range[2], annotation, ipnum))
     if ipnum and range[1] and range[2] then
       if ipnum >= range[1] and ipnum <= range[2] then
+        request_map.handle:logDebug(string.format("matched >> match_iprange range [%s %s], annotation %s, ipnum %s", range[1] , range[2], annotation, ipnum))
         return annotation
       end
     end
@@ -116,6 +119,7 @@ function match_or_list(request_map, list)
     -- search(1666603009, btree)
     local range, annotation = btree_search(request_map.attrs.ipnum, list.iprange, request_map.handle)
     if range then
+      request_map.handle:logDebug(string.format("matched >> match_or_list btree_search [%s %s], annotation %s, ipnum %s", range[1] , range[2], annotation, request_map.attrs.ipnum))
       return annotation  or 'ip-range', list.tags
     end
   end
