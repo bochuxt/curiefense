@@ -21,7 +21,7 @@ def get_tasks(options):
         if options.task_file is None:
             err = f"Could not retrieve taskdb [{options.task_db_name}] at {options.base_url}"
         else:
-            err = f"Could not parse content of file {options.task_file}"
+            err = f"Could not parse content of file [{options.task_file.name}]"
         raise TaskListNotFound(f"{err}: {e}")
     return tasks
 
