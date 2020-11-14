@@ -49,9 +49,11 @@ function match_pairs(request_map, list_entry)
   for entry_name, list_entries in pairs(list_entry) do
     for key, valuelist in pairs(list_entries) do
       for _, value in ipairs(valuelist) do
-        if (request_map[entry_name][key] == value[1] or re_match(request_map[entry_name][key], value[1])) then
-          request_map.handle:logDebug(string.format("matched >> match_pairs %s %s", request_map[entry_name][key], value[1]))
-          return value[2]
+        if request_map[entry_name][key] and value[1] then
+          if (request_map[entry_name][key] == value[1] or re_match(request_map[entry_name][key], value[1])) then
+            request_map.handle:logDebug(string.format("matched >> match_pairs %s %s", request_map[entry_name][key], value[1]))
+            return value[2]
+          end
         end
       end
     end
