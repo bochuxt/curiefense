@@ -1,3 +1,11 @@
+FROM node as builder
+
+COPY ui /ui
+WORKDIR /ui
+RUN npm install
+RUN npm run build
+
+
 FROM nginx:latest
 
 USER root
@@ -10,7 +18,7 @@ RUN ln -sf /dev/stdout /var/log/nginx/access.log && \
 RUN /usr/bin/apt-get update && \
     /usr/bin/apt-get install -yq --no-install-recommends dumb-init && \
 	rm -rf /var/lib/apt/lists/*
-COPY app /app
+COPY --from=builder /ui/dist /app
 COPY init /init
 EXPOSE 80
 EXPOSE 443
