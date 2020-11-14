@@ -9,7 +9,7 @@ local json_safe   = require "cjson.safe"
 local re_match        = utils.re_match
 local tag_request     = utils.tag_request
 local btree_search    = rangesbtree.btree_search
-local json_encode     = json_safe.encode
+local json_encode     = cjson.encode
 
 function match_singles(request_map, list_entry)
 
