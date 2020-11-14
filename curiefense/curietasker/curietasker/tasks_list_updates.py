@@ -38,6 +38,9 @@ class TaskUpdate(Task):
                     self.log.error(f"Could not download {lstid} in branch {branch}: {e}")
                     continue
                 source = lst.get("source")
+                if not source:
+                    self.log.error(f"Profiling list {lstid} is missing 'source' attribute or attribute is empty")
+                    continue
                 if source == "self-managed":
                     self.log.info(f"List {lstid} is self-managed")
                     continue
