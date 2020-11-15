@@ -110,10 +110,9 @@ class TaskPublish(Task):
 
 @Task.register("update_and_publish")
 class TaskUpdateAndPublish(TaskUpdate, TaskPublish):
-    def check_args(self, url, branch):
-        TaskUpdate.check_args(self, url)
-        TaskPublish.check_args(self, branch)
+    def check_args(self, list_ids, branches):
+        TaskUpdate.check_args(self, list_ids, branches)
+        TaskPublish.check_args(self, branches)
     def action(self):
         TaskUpdate.action(self)
         TaskPublish.action(self)
-
