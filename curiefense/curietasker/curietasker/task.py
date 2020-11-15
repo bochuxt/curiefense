@@ -38,7 +38,7 @@ class Task(object):
     def __init__(self, options, taskid, name, datespec, **args):
         self.options = options
         self.confserver = options.api
-        self.log = logging.getLogger(f"curietasker:task:[{name}]")
+        self.log = logging.getLogger(f"curietasker:task:[{taskid}]")
         self.taskid = taskid
         self.name = name
         self.datespec = datespec
