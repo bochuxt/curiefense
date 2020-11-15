@@ -83,12 +83,29 @@ class TaskUpdate(Task):
 
 @Task.register("publish")
 class TaskPublish(Task):
-    def check_args(self, branch):
-        self.branch = branch
+    def check_args(self, branches):
+        assert type(branches) is list or branches == "*", f"Unrecognized branch list: {branches!r}"
+        self.branches = branches
     def action(self):
-        self.log.info(f"I should publish branch {self.branch}")
-        time.sleep(20)
-        self.log.info(f"I published {self.branch}, didn't I?")
+        sysdb = self.confserver.db.get("system").body
+        
+        branches = self.branches
+        if branches == "*":
+            l = self.confserver.configs.list().body
+            branches = [ b["id"] for b in l ]
+            self.log.info(f"Working on all branches: {branches!r}")
+        for branch in branches:
+            for brbuck in sysdb["branch_buckets"]:
+                if brbuck["name"] == branch:
+                    buckets = [ buck for buck in sysdb["buckets"]
+                                if buck["name"] in brbuck["buckets"] ]
+                    self.log.info(f"Publishing branch [{branch}] to buckets {buckets!r}")
+                    res = self.confserver.tools.publish(branch, body=buckets).body
+                    if res["ok"]:
+                        self.log.info(f"Publish status: {res!r}")
+                    else:
+                        self.log.error(f"Publish status: {res!r}")
+
 
 
 @Task.register("update_and_publish")
